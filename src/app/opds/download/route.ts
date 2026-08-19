@@ -14,11 +14,13 @@ export async function GET(request: Request) {
   }
 
   const filename =
-    blobUrl.split("/").pop()?.replace(/\?.*$/, "") || "book.epub";
+    decodeURIComponent(blobUrl.split("/").pop()?.replace(/\?.*$/, "") || "file");
+
+  const contentType = res.headers.get("content-type") || "application/octet-stream";
 
   return new NextResponse(res.body, {
     headers: {
-      "Content-Type": "application/epub+zip",
+      "Content-Type": contentType,
       "Content-Disposition": `attachment; filename="${filename}"`,
       ...(res.headers.get("content-length")
         ? { "Content-Length": res.headers.get("content-length")! }

@@ -43,11 +43,6 @@ export default function Home() {
   }, [loadFiles]);
 
   async function uploadFile(file: File) {
-    if (!file.name.toLowerCase().endsWith(".epub")) {
-      setError(`"${file.name}" is not an EPUB file`);
-      return;
-    }
-
     setUploading(true);
     setError(null);
     setUploadProgress(`Uploading ${file.name}...`);
@@ -122,7 +117,7 @@ export default function Home() {
           Send to XTEink
         </h1>
         <p className="text-muted mt-1 text-sm">
-          Upload EPUBs from anywhere. Download on your device via OPDS.
+          Upload files from anywhere. Download on your device via OPDS.
         </p>
       </header>
 
@@ -166,14 +161,14 @@ export default function Home() {
           <p className="text-sm text-muted">{uploadProgress}</p>
         ) : (
           <>
-            <p className="text-sm font-medium">Drop EPUB files here</p>
+            <p className="text-sm font-medium">Drop files here</p>
             <p className="text-xs text-muted">or click to browse</p>
           </>
         )}
         <input
           ref={inputRef}
           type="file"
-          accept=".epub"
+          accept=".epub,.pdf,.cbz,.cbr,.fb2,.mobi,.azw3,.djvu,.txt"
           multiple
           className="hidden"
           onChange={(e) => {
@@ -253,7 +248,7 @@ export default function Home() {
 
       {files.length === 0 && !uploading && (
         <p className="mt-8 text-center text-sm text-muted">
-          No books yet. Upload your first EPUB above.
+          No files yet. Upload something above.
         </p>
       )}
 

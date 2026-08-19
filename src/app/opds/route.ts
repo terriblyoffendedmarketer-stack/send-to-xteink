@@ -11,7 +11,22 @@ function escapeXml(str: string): string {
 }
 
 function titleFromPathname(pathname: string): string {
-  return pathname.replace(/^books\//, "").replace(/\.epub$/i, "");
+  return pathname.replace(/^books\//, "").replace(/\.[^.]+$/, "");
+}
+
+function mimeFromPathname(pathname: string): string {
+  const ext = pathname.split(".").pop()?.toLowerCase();
+  const types: Record<string, string> = {
+    epub: "application/epub+zip",
+    pdf: "application/pdf",
+    cbz: "application/vnd.comicbook+zip",
+    cbr: "application/vnd.comicbook-rar",
+    fb2: "application/x-fictionbook+xml",
+    mobi: "application/x-mobipocket-ebook",
+    azw3: "application/x-mobi8-ebook",
+    txt: "text/plain",
+  };
+  return types[ext || ""] || "application/octet-stream";
 }
 
 export async function GET(request: Request) {
@@ -40,7 +55,7 @@ export async function GET(request: Request) {
     <content type="text">${escapeXml(title)} (${formatSize(blob.size)})</content>
     <link rel="http://opds-spec.org/acquisition"
           href="${baseUrl}/opds/download?url=${encodeURIComponent(blob.url)}"
-          type="application/epub+zip"
+          type="${mimeFromPathname(blob.pathname)}"
           length="${blob.size}"/>
   </entry>`;
     })

@@ -18,13 +18,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No file provided" }, { status: 400 });
   }
 
-  if (!file.name.toLowerCase().endsWith(".epub")) {
-    return NextResponse.json(
-      { error: "Only EPUB files are supported" },
-      { status: 400 }
-    );
-  }
-
   if (file.size > MAX_FILE_SIZE) {
     return NextResponse.json(
       { error: "File too large (max 50MB)" },
