@@ -14,9 +14,8 @@ export async function POST(request: Request) {
   const jsonResponse = await handleUpload({
     body,
     request,
-    onBeforeGenerateToken: async (pathname) => {
+    onBeforeGenerateToken: async () => {
       return {
-        allowedContentTypes: ["*/*"],
         maximumSizeInBytes: 100 * 1024 * 1024,
       };
     },
