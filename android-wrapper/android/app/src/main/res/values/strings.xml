@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Send to XTEink</string>
+    <string name="title_activity_main">Send to XTEink</string>
+    <string name="package_name">app.xteink.send</string>
+    <string name="custom_url_scheme">app.xteink.send</string>
+</resources>

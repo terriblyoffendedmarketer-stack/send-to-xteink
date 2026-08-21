@@ -1,0 +1,12 @@
+{
+  "appId": "app.xteink.send",
+  "appName": "Send to XTEink",
+  "webDir": "www",
+  "server": {
+    "url": "https://send-to-xteink.vercel.app",
+    "cleartext": false
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
