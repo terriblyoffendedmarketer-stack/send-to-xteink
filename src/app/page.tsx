@@ -168,7 +168,7 @@ export default function Home() {
         <input
           ref={inputRef}
           type="file"
-          accept=".epub,.pdf,.cbz,.cbr,.fb2,.mobi,.azw3,.djvu,.txt"
+          accept="*/*"
           multiple
           className="hidden"
           onChange={(e) => {
