@@ -1,5 +1,6 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface FileEntry {
@@ -16,7 +17,7 @@ function formatSize(bytes: number): string {
 }
 
 function titleFromPathname(pathname: string): string {
-  return pathname.replace(/^books\//, "").replace(/\.epub$/i, "");
+  return pathname.replace(/^books\//, "").replace(/\.[^.]+$/, "");
 }
 
 export default function Home() {
@@ -48,24 +49,10 @@ export default function Home() {
     setUploadProgress(`Uploading ${file.name}...`);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+      await upload(`books/${file.name}`, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
       });
-
-      if (!res.ok) {
-        let message = "Upload failed";
-        try {
-          const data = await res.json();
-          message = data.error || message;
-        } catch {
-          message = `Upload failed (${res.status})`;
-        }
-        throw new Error(message);
-      }
 
       await loadFiles();
       setUploadProgress(null);
