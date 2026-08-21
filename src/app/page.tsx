@@ -19,6 +19,60 @@ function titleFromPathname(pathname: string): string {
   return pathname.replace(/^books\//, "").replace(/\.epub$/i, "");
 }
 
+function InstallSection() {
+  const [platform, setPlatform] = useState<"android" | "ios" | "desktop" | null>(null);
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (/android/.test(ua)) setPlatform("android");
+    else if (/iphone|ipad|ipod/.test(ua)) setPlatform("ios");
+    else setPlatform("desktop");
+
+    setIsStandalone(
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (navigator as unknown as { standalone?: boolean }).standalone === true
+    );
+  }, []);
+
+  if (isStandalone || !platform) return null;
+
+  return (
+    <section className="mt-8 border border-border rounded-lg p-4">
+      <h2 className="text-sm font-medium mb-3">Install app</h2>
+      {platform === "android" && (
+        <div className="space-y-3">
+          <a
+            href="/send-to-xteink.apk"
+            download
+            className="flex items-center gap-2 bg-foreground text-background rounded-md px-4 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity w-full justify-center"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Download Android APK
+          </a>
+          <p className="text-xs text-muted">
+            Works without Chrome. Updates automatically from the server.
+          </p>
+        </div>
+      )}
+      {platform === "ios" && (
+        <p className="text-xs text-muted">
+          Tap the share button, then &ldquo;Add to Home Screen&rdquo; to install.
+        </p>
+      )}
+      {platform === "desktop" && (
+        <p className="text-xs text-muted">
+          Click the install icon in your browser&apos;s address bar to install as a web app.
+        </p>
+      )}
+    </section>
+  );
+}
+
 export default function Home() {
   const [files, setFiles] = useState<FileEntry[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -251,6 +305,9 @@ export default function Home() {
           No files yet. Upload something above.
         </p>
       )}
+
+      {/* Install section */}
+      <InstallSection />
 
       {/* Setup info */}
       <footer className="mt-auto pt-8 border-t border-border">
